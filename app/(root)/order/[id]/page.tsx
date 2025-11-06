@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import OrderDetailsTable from "@/components/shared/forms/order-details-table";
 import { ShippingAddress } from "@/types";
 
+
 export const metadata: Metadata = {
     title: 'Order Details',
 };
@@ -22,7 +23,9 @@ const OrderDetailsPage = async(props: {
         <OrderDetailsTable order={{
             ...order,
             shippingAddress: order.shippingAddress as ShippingAddress
-        }}/>
+        }}
+        paypalClientId={process.env.PAYPAL_CLIENT_ID || 'sb'}
+        />
      );
 }
  
