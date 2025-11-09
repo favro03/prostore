@@ -9,13 +9,19 @@ const ProductCard = ({product}: {product:Product}) => {
         <Card className="w-full max-w-sm">
             <CardHeader className="items-center">
                 <Link href={`/product/${product.slug}`}>
-                    <Image 
-                        src={product.images[0]} 
-                        alt="product.name"
-                        height={300}
-                        width={300}
-                        priority={true}
+                    {product.images && product.images[0] && product.images[0] !== '' ? (
+                        <Image 
+                            src={product.images[0]} 
+                            alt={product.name}
+                            height={300}
+                            width={300}
+                            priority={true}
                         />
+                    ) : (
+                        <div className="w-[300px] h-[300px] bg-muted flex items-center justify-center">
+                            <span className="text-muted-foreground">No Image</span>
+                        </div>
+                    )}
                 </Link>
             </CardHeader>
             <CardContent className="p-4 grid gap-4">
