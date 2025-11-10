@@ -11,7 +11,7 @@ import { CartItem, PaymentResult } from "@/types";
 import { paypal } from "../paypal";
 import { revalidatePath } from "next/cache";
 import { PAGE_SIZE } from "../constants";
-import { success } from "zod";
+import { Prisma } from "../generated/prisma";
 
 //Create order and create the order items
 export async function createOrder() {
@@ -314,24 +314,42 @@ export async function getOrderSummary() {
 
 //Get all orders
 export async function getAllOrders({
-    limit = PAGE_SIZE,
-    page
+  limit = PAGE_SIZE,
+  page,
+  query,
 }: {
-    limit?: number;
-    page: number
+  limit?: number;
+  page: number;
+  query: string;
 }) {
+  const queryFilter: Prisma.OrderWhereInput =
+    query && query !== 'all'
+      ? {
+          user: {
+            name: {
+              contains: query,
+              mode: 'insensitive',
+            } as Prisma.StringFilter,
+          },
+        }
+      : {};
+
   const data = await prisma.order.findMany({
-    orderBy: {createdAt: 'desc'},
+    where: {
+      ...queryFilter,
+    },
+    orderBy: { createdAt: 'desc' },
     take: limit,
     skip: (page - 1) * limit,
-    include: {user: {select: {name: true}}}
-  })
-  const dataCount = await prisma.order.count()
+    include: { user: { select: { name: true } } },
+  });
+
+  const dataCount = await prisma.order.count();
 
   return {
     data,
     totalPages: Math.ceil(dataCount / limit),
-  }
+  };
 }
 
 //Delete an oder
