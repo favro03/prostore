@@ -24,11 +24,11 @@ const AdminProductsPage = async (props: {
         page,
         category
     })
-console.log(products)
-    // Debug logging to see what data we're getting
-    console.log('Products data:', products);
-    console.log('Products array:', products?.data);
-    console.log('Products array length:', products?.data?.length);
+// console.log(products)
+//     // Debug logging to see what data we're getting
+//     console.log('Products data:', products);
+//     console.log('Products array:', products?.data);
+//     console.log('Products array length:', products?.data?.length);
 
     return ( 
         <div className="space-y-2">
