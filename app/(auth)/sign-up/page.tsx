@@ -9,11 +9,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { APP_NAME } from '@/lib/constants';
-import CredentialsSignInForm from '../../../components/shared/forms/credentials-signin-form'
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import SignUpForm from '@/components/shared/forms/sign-up-form';
-import { Sign } from 'crypto';
+
 
 export const metadata: Metadata = {
   title: 'Sign Up',
