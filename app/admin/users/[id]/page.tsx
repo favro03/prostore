@@ -4,7 +4,7 @@ import { getUserById } from "@/lib/actions/user.actions";
 import UpdateUserForm from "@/components/admin/update-user-form";
 
 
-export const mettadata: Metadata = {
+export const metadata: Metadata = {
     title: 'Update User'
 }
 
