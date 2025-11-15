@@ -1,16 +1,23 @@
-export { auth as middleware } from '@/auth-config';
+import { auth } from '@/auth-config';
+
+export default auth(() => {
+  // Note: This middleware wrapper will only run for paths matched by the config.matcher
+  // Webhook paths are already excluded by the matcher, so they bypass auth entirely
+  
+  // The auth callback handles the actual authentication logic in auth-config.ts
+  return;
+});
 
 export const config = {
-  // Explicitly exclude webhook paths from middleware
   matcher: [
     /*
-     * Match all request paths except for:
-     * 1. /api/webhooks (webhook endpoints) 
-     * 2. /api/auth (NextAuth.js)
-     * 3. /api/uploadthing
-     * 4. /_next/static (static files)
-     * 5. /_next/image (image optimization files)
-     * 6. /favicon.ico
+     * Match all request paths except for the ones starting with:
+     * - api/webhooks (webhook endpoints - EXCLUDED from auth middleware entirely)
+     * - api/auth (NextAuth.js endpoints)
+     * - api/uploadthing 
+     * - _next/static (static files)
+     * - _next/image (image optimization files)  
+     * - favicon.ico (favicon file)
      */
     '/((?!api/webhooks|api/auth|api/uploadthing|_next/static|_next/image|favicon.ico).*)',
   ],
