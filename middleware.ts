@@ -1,12 +1,4 @@
-import { auth } from '@/auth-config';
-
-export default auth(() => {
-  // Note: This middleware wrapper will only run for paths matched by the config.matcher
-  // Webhook paths are already excluded by the matcher, so they bypass auth entirely
-  
-  // The auth callback handles the actual authentication logic in auth-config.ts
-  return;
-});
+export { auth as middleware } from '@/auth-config';
 
 export const config = {
   matcher: [
