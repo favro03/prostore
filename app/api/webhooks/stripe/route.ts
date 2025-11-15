@@ -11,9 +11,10 @@ export async function POST(req: NextRequest) {
       req.headers.get('stripe-signature') as string,
       process.env.STRIPE_WEBHOOK_SECRET as string
     );
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
     return NextResponse.json(
-      { message: `Webhook signature verification failed: ${err.message}` },
+      { message: `Webhook signature verification failed: ${errorMessage}` },
       { status: 400 }
     );
   }
