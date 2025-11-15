@@ -23,8 +23,19 @@ export const authConfig = {
         /\/admin/,
       ];
 
+      // Array of paths that should bypass authentication entirely
+      const publicApiPaths = [
+        /\/api\/webhooks\/(.*)/,
+        /\/api\/auth\/(.*)/,
+        /\/api\/uploadthing\/(.*)/,
+      ];
+
       // Get pathname from the req URL object
       const { pathname } = request.nextUrl;
+      
+      // Allow public API paths to bypass authentication
+      if (publicApiPaths.some((p) => p.test(pathname))) return true;
+      
       // Check if user is not authenticated and accessing a protected path
       if (!auth && protectedPaths.some((p) => p.test(pathname))) return false;
 
