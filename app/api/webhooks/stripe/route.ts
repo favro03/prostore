@@ -27,10 +27,9 @@ export async function POST(req: NextRequest) {
       orderId: paymentIntent.metadata?.orderId,
       paymentResult: {
         id: paymentIntent.id,
-        status: 'COMPLETED', // or paymentIntent.status
-        // use receipt_email or store the email in metadata during checkout
-        email_address: paymentIntent.receipt_email || '',
-        pricePaid: (paymentIntent.amount_received / 100).toFixed(),
+        status: 'COMPLETED',
+        email_address: paymentIntent.receipt_email || paymentIntent.metadata?.email || 'no-email@example.com',
+        pricePaid: (paymentIntent.amount_received / 100).toFixed(2),
       },
     });
 
