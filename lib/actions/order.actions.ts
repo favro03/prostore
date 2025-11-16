@@ -7,11 +7,12 @@ import { getMyCart } from "./cart.actions";
 import { getUserById } from "./user.actions";
 import { insertOrderSchema } from "../validators";
 import { prisma } from "@/db/prisma";
-import { CartItem, PaymentResult } from "@/types";
+import { CartItem, PaymentResult, ShippingAddress } from "@/types";
 import { paypal } from "../paypal";
 import { revalidatePath } from "next/cache";
 import { PAGE_SIZE } from "../constants";
 import { Prisma } from "../generated/prisma";
+import { sendPurchaseReceipt } from "@/email";
 
 //Create order and create the order items
 export async function createOrder() {
@@ -226,7 +227,29 @@ export async function updateOrderToPaid({
         },
     });
     if(!updatedOrder) throw new Error('Order not found');
+
+    try {
+        await sendPurchaseReceipt({
+            order: {
+                ...updatedOrder,
+                orderitems: updatedOrder.orderitems.map(item => ({
+                    ...item,
+                    qty: Number(item.qty),
+                    price: item.price.toString()
+                })),
+                shippingAddress: updatedOrder.shippingAddress as ShippingAddress,
+                paymentResult: updatedOrder.paymentResult as PaymentResult,
+            }
+        });
+        console.log('Purchase receipt sent successfully for order:', orderId);
+    } catch (error) {
+        console.error('Failed to send purchase receipt for order:', orderId, error);
+        // Don't throw the error to avoid failing the payment process
+        // Email failure shouldn't prevent order completion
+    }
 }
+
+
 
 //Get user's orders
 export async function getMyOrders({
