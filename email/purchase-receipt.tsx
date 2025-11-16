@@ -16,7 +16,7 @@ import { Order } from '@/types';
 import { formatCurrency } from '@/lib/utils';
 import sampleData from '@/db/sample-data';
 
-
+//test data
 PurchaseReceiptEmail.PreviewProps = {
   order: {
     id: crypto.randomUUID(),
